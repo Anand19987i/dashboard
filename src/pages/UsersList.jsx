@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { users } from '../Samples/users';
+import { useDarkMode } from '../context/DarkModeContext';
 
 /**
  * UsersList Component
- *
- * Displays a sortable and paginated table of users.
- * Features:
- * - Column sorting (by ID, name, email, role, and status)
- * - Pagination with ellipses for better UX
+ * 
+ * This component renders a paginated and sortable table of user data.
+ * It supports dark mode, column sorting, and responsive pagination.
  */
-
 const UsersList = () => {
-  // ---------- State Management ----------
-  const [currentPage, setCurrentPage] = useState(1); // Tracks current page for pagination
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' }); // Sorting state
+  // ------------------------ State Management ------------------------
 
-  // ---------- Sorting Logic ----------
+  const [currentPage, setCurrentPage] = useState(1); // Tracks the current pagination page
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' }); // Sorting configuration
+
+  // Access dark mode state from context
+  const { darkMode } = useDarkMode();
+
+  // ------------------------ Sorting Logic ------------------------
+
   const sortedUsers = [...users].sort((a, b) => {
     if (!sortConfig.key) return 0; // No sorting if no key is selected
 
@@ -37,24 +40,26 @@ const UsersList = () => {
     return 0;
   });
 
-  // ---------- Pagination Logic ----------
+  // ------------------------ Pagination Logic ------------------------
+
   const itemsPerPage = 8;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = sortedUsers.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
-  // ---------- UI Render ----------
+  // ------------------------ Render ------------------------
+
   return (
     <div>
       <Layout>
-        <div className='p-6 bg-white rounded-xl shadow-sm border border-gray-100'>
-          <div className='overflow-x-auto'>
-            {/* ---------- User Table ---------- */}
-            <table className='w-full'>
-              <thead className='bg-gray-50'>
+        <div className={`p-6 shadow-sm ${darkMode ? 'bg-slate-900' : 'bg-white border border-gray-100 rounded-xl'}`}>
+          <div className="overflow-x-auto">
+            {/* ------------------------ User Table ------------------------ */}
+            <table className="w-full">
+              <thead className={darkMode ? 'bg-slate-800 text-gray-200' : 'bg-gray-50'}>
                 <tr>
-                  {/* Table Headers with Sort Handlers */}
+                  {/* Table Headers with Sortable Columns */}
                   {[
                     { label: 'ID', key: 'id' },
                     { label: 'Name', key: 'name' },
@@ -71,11 +76,10 @@ const UsersList = () => {
                             : { key, direction: 'asc' }
                         )
                       }
-                      className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer"
+                      className={`px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}
                     >
                       <div className="flex items-center gap-1">
                         {label}
-                        {/* Show sort icon if current sort key */}
                         {sortConfig.key === key && (sortConfig.direction === 'asc' ? '▲' : '▼')}
                       </div>
                     </th>
@@ -83,20 +87,19 @@ const UsersList = () => {
                 </tr>
               </thead>
 
-              {/* ---------- Table Body ---------- */}
-              <tbody className='divide-y divide-gray-200'>
+              <tbody className={darkMode ? 'divide-y divide-slate-800' : 'divide-y divide-gray-200'}>
                 {currentItems.map((user) => (
-                  <tr key={user.id} className='hover:bg-gray-50 transition-colors'>
-                    <td className='px-6 py-4 text-sm text-gray-900'>{user.id}</td>
-                    <td className='px-6 py-4 text-sm text-gray-900'>{user.name}</td>
-                    <td className='px-6 py-4 text-sm text-gray-600'>{user.email}</td>
-                    <td className='px-6 py-4'>
-                      <span className='px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800'>
+                  <tr key={user.id} className={`transition-colors ${darkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-50'}`}>
+                    <td className={`px-6 py-4 text-sm ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>{user.id}</td>
+                    <td className={`px-6 py-4 text-sm ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>{user.name}</td>
+                    <td className={`px-6 py-4 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{user.email}</td>
+                    <td className="px-6 py-4">
+                      <span className="px-3 py-1 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                         {user.role}
                       </span>
                     </td>
-                    <td className='px-6 py-4'>
-                      <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${
                         user.status === 'Active'
                           ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
@@ -110,54 +113,60 @@ const UsersList = () => {
             </table>
           </div>
 
-          {/* ---------- Pagination Controls ---------- */}
+          {/* ------------------------ Pagination Controls ------------------------ */}
           <div className="mt-6 flex justify-between items-center">
-
-            {/* Previous Button */}
+            {/* Previous Page Button */}
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`px-4 py-2 text-sm font-medium border rounded-md disabled:opacity-50 disabled:cursor-not-allowed
+                ${darkMode
+                  ? 'text-gray-200 bg-slate-800 border-slate-700 hover:bg-slate-700'
+                  : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'}`}
             >
               Previous
             </button>
 
-            {/* Page Numbers */}
-            <div className="text-sm text-gray-700 flex gap-1 items-center">
+            {/* Page Number Buttons with Ellipses */}
+            <div className="text-sm flex gap-1 items-center">
               {totalPages <= 5 ? (
-                // Show all pages if total is 5 or fewer
                 [...Array(totalPages).keys()].map((page) => (
                   <span
                     key={page}
-                    className={`px-3 py-2 border border-gray-100 cursor-pointer ${currentPage === page + 1 ? 'bg-gray-200' : ''}`}
                     onClick={() => setCurrentPage(page + 1)}
+                    className={`px-3 py-2 rounded border cursor-pointer 
+                      ${darkMode
+                        ? `${currentPage === page + 1 ? 'bg-slate-700 text-white' : 'border-slate-700 text-gray-300'}`
+                        : `${currentPage === page + 1 ? 'bg-gray-200' : 'border-gray-100'}`}`}
                   >
                     {page + 1}
                   </span>
                 ))
               ) : (
-                // Ellipsis-based pagination for >5 pages
                 <>
-                  {/* First Page */}
                   <span
-                    className={`px-3 py-2 border border-gray-100 cursor-pointer ${currentPage === 1 ? 'bg-gray-200' : ''}`}
                     onClick={() => setCurrentPage(1)}
+                    className={`px-3 py-2 rounded border cursor-pointer 
+                      ${darkMode
+                        ? `${currentPage === 1 ? 'bg-slate-700 text-white' : 'border-slate-700 text-gray-300'}`
+                        : `${currentPage === 1 ? 'bg-gray-200' : 'border-gray-100'}`}`}
                   >
                     1
                   </span>
 
-                  {/* Left Ellipsis */}
-                  {currentPage > 3 && <span className="px-2">...</span>}
+                  {currentPage > 3 && <span className="px-2 text-gray-500">...</span>}
 
-                  {/* Dynamic middle pages */}
                   {Array.from({ length: 3 }, (_, i) => {
                     const page = currentPage === totalPages ? totalPages - 2 + i : currentPage - 1 + i;
                     if (page > 1 && page < totalPages) {
                       return (
                         <span
                           key={page}
-                          className={`px-3 py-2 border border-gray-100 cursor-pointer ${currentPage === page ? 'bg-gray-200' : ''}`}
                           onClick={() => setCurrentPage(page)}
+                          className={`px-3 py-2 rounded border cursor-pointer 
+                            ${darkMode
+                              ? `${currentPage === page ? 'bg-slate-700 text-white' : 'border-slate-700 text-gray-300'}`
+                              : `${currentPage === page ? 'bg-gray-200' : 'border-gray-100'}`}`}
                         >
                           {page}
                         </span>
@@ -165,13 +174,14 @@ const UsersList = () => {
                     }
                   })}
 
-                  {/* Right Ellipsis */}
-                  {currentPage < totalPages - 2 && <span className="px-2">...</span>}
+                  {currentPage < totalPages - 2 && <span className="px-2 text-gray-500">...</span>}
 
-                  {/* Last Page */}
                   <span
-                    className={`px-3 py-2 border border-gray-100 cursor-pointer ${currentPage === totalPages ? 'bg-gray-200' : ''}`}
                     onClick={() => setCurrentPage(totalPages)}
+                    className={`px-3 py-2 rounded border cursor-pointer 
+                      ${darkMode
+                        ? `${currentPage === totalPages ? 'bg-slate-700 text-white' : 'border-slate-700 text-gray-300'}`
+                        : `${currentPage === totalPages ? 'bg-gray-200' : 'border-gray-100'}`}`}
                   >
                     {totalPages}
                   </span>
@@ -179,11 +189,14 @@ const UsersList = () => {
               )}
             </div>
 
-            {/* Next Button */}
+            {/* Next Page Button */}
             <button
               onClick={() => setCurrentPage(p => p + 1)}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`px-4 py-2 text-sm font-medium border rounded-md disabled:opacity-50 disabled:cursor-not-allowed
+                ${darkMode
+                  ? 'text-gray-200 bg-slate-800 border-slate-700 hover:bg-slate-700'
+                  : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'}`}
             >
               Next
             </button>

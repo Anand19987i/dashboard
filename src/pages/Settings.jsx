@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
-import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
-import Layout from '../components/Layout';
-
 /**
  * Settings Page
  *
- * Allows users to update their account settings, including:
- * - Full name
- * - Email address
- * - Password and confirmation
+ * A user settings interface allowing profile updates:
+ * - Name
+ * - Email
+ * - Password & Confirm Password
  *
- * Includes client-side validation, responsive UI, and user feedback.
+ * Features:
+ * - Form validation
+ * - Password visibility toggle
+ * - Responsive, accessible, and dark-mode compatible UI
  */
 
+import React, { useState } from 'react';
+import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import Layout from '../components/Layout';
+import { useDarkMode } from '../context/DarkModeContext';
+
 const Settings = () => {
-  // ------------------ State ------------------ //
+  // ---------------- State Management ---------------- //
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,7 +30,9 @@ const Settings = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // ------------------ Validation ------------------ //
+  const { darkMode } = useDarkMode(); // Access dark mode state
+
+  // ---------------- Validation ---------------- //
   const validateForm = () => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,7 +59,20 @@ const Settings = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ------------------ Form Handlers ------------------ //
+  // ---------------- Handlers ---------------- //
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
@@ -62,27 +81,31 @@ const Settings = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  // ---------------- Style Classes ---------------- //
+  const containerClasses = `max-w-2xl mx-auto p-8 rounded-2xl shadow-md border mt-6 transition-colors duration-300 ${
+    darkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-gray-100 text-gray-900'
+  }`;
 
-    // Update form data
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const inputClasses = `w-full pl-10 pr-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:outline-none ${
+    darkMode
+      ? 'bg-slate-800 text-white border-slate-600 focus:ring-blue-500'
+      : 'bg-white text-gray-900 border-gray-300 focus:ring-blue-500'
+  }`;
 
-    // Clear error if present
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
+  const labelClasses = `block text-sm font-medium mb-1 ${
+    darkMode ? 'text-gray-300' : 'text-gray-700'
+  }`;
 
-  // ------------------ Render ------------------ //
+  const errorClasses = 'text-sm text-red-500 mt-1';
+
+  // ---------------- Render ---------------- //
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-gray-100 mt-6">
-        <h2 className="text-3xl font-semibold text-gray-800 mb-8">Account Settings</h2>
+      <div className={containerClasses}>
+        <h2 className="text-3xl font-semibold mb-8">Account Settings</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-
-          {/* -------- Text Inputs: Name & Email -------- */}
+          {/* ---------- Name and Email Inputs ---------- */}
           {[
             {
               label: 'Full Name',
@@ -100,35 +123,25 @@ const Settings = () => {
             }
           ].map((field) => (
             <div key={field.name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label}
-              </label>
-
+              <label className={labelClasses}>{field.label}</label>
               <div className="relative">
-                {/* Left Icon */}
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                   {field.icon}
                 </div>
-
-                {/* Input Field */}
                 <input
                   type={field.type}
                   name={field.name}
                   value={formData[field.name]}
                   onChange={handleChange}
                   placeholder={field.placeholder}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className={inputClasses}
                 />
               </div>
-
-              {/* Validation Error */}
-              {errors[field.name] && (
-                <p className="text-sm text-red-500 mt-1">{errors[field.name]}</p>
-              )}
+              {errors[field.name] && <p className={errorClasses}>{errors[field.name]}</p>}
             </div>
           ))}
 
-          {/* -------- Password Inputs: New & Confirm -------- */}
+          {/* ---------- Password and Confirm Password ---------- */}
           {[
             {
               label: 'New Password',
@@ -146,27 +159,19 @@ const Settings = () => {
             }
           ].map(({ label, name, value, show, setShow }) => (
             <div key={name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {label}
-              </label>
-
+              <label className={labelClasses}>{label}</label>
               <div className="relative">
-                {/* Lock Icon */}
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                   <FiLock />
                 </div>
-
-                {/* Password Input */}
                 <input
                   type={show ? 'text' : 'password'}
                   name={name}
                   value={value}
                   onChange={handleChange}
                   placeholder={label}
-                  className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className={`${inputClasses} pr-10`}
                 />
-
-                {/* Toggle Visibility */}
                 <button
                   type="button"
                   onClick={() => setShow(!show)}
@@ -175,15 +180,11 @@ const Settings = () => {
                   {show ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
-
-              {/* Validation Error */}
-              {errors[name] && (
-                <p className="text-sm text-red-500 mt-1">{errors[name]}</p>
-              )}
+              {errors[name] && <p className={errorClasses}>{errors[name]}</p>}
             </div>
           ))}
 
-          {/* -------- Submit Button -------- */}
+          {/* ---------- Submit Button ---------- */}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition duration-200 shadow-sm"

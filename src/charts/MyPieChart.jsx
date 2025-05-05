@@ -1,6 +1,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { overviewData } from '../Samples/overview';
+import { useDarkMode } from '../context/DarkModeContext';
 
 const COLORS = [
     '#8884d8', // Purple
@@ -15,10 +16,24 @@ const COLORS = [
     '#ff8042', // Orange
     '#b084cc', // Lavender
     '#6b5b95'  // Indigo
-  ];
-  
+];
 
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+const DARK_COLORS = [
+    '#6366f1', // Dark Purple
+    '#34d399', // Dark Green
+    '#fbbf24', // Dark Yellow
+    '#fb923c', // Dark Coral
+    '#92400e', // Dark Sienna
+    '#60a5fa', // Dark Blue
+    '#a3e635', // Dark Lime
+    '#4ade80', // Dark Lime Green
+    '#f59e0b', // Dark Amber
+    '#ea580c', // Dark Orange
+    '#8b5cf6', // Dark Lavender
+    '#4c1d95'  // Dark Indigo
+];
+
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }, darkMode) => {
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -30,7 +45,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
         <text
             x={x}
             y={y}
-            fill="#333"
+            fill={darkMode ? "#f3f4f6" : "#333"}
             fontSize={12}
             fontWeight="bold"
             textAnchor={x > cx ? 'start' : 'end'}
@@ -42,19 +57,18 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 };
 
 const MyPieChart = () => {
+  const { darkMode } = useDarkMode();
     return (
-        <div
-            style={{
-                width: '100%',
-                height: '100%',
-                padding: '1rem',
-                background: '#ffffff',
-                borderRadius: '1rem',
-                boxShadow: '0 4px 4px rgba(0, 0, 0, 0.1)',
-                marginBottom: '1.5rem',
-            }}
-        >
-            <h2 className="text-center text-xl font-semibold text-gray-800 ">User Roles Overview</h2>
+        <div className={`w-full h-full p-4 rounded-xl shadow-sm ${
+            darkMode 
+                ? 'bg-gray-800 border border-gray-700' 
+                : 'bg-white border border-gray-200'
+        } transition-colors duration-300`}>
+            <h2 className={`text-center text-xl font-semibold ${
+                darkMode ? 'text-white' : 'text-gray-800'
+            }`}>
+                User Roles Overview
+            </h2>
             <ResponsiveContainer width="100%" height="90%">
                 <PieChart>
                     <Pie
@@ -65,19 +79,35 @@ const MyPieChart = () => {
                         innerRadius={60}
                         outerRadius={100}
                         labelLine={false}
-                        label={renderCustomizedLabel}
+                        label={(props) => renderCustomizedLabel(props, darkMode)}
                         paddingAngle={3}
                     >
-
                         {overviewData.userRoles.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            <Cell 
+                                key={`cell-${index}`} 
+                                fill={darkMode ? DARK_COLORS[index % DARK_COLORS.length] : COLORS[index % COLORS.length]} 
+                            />
                         ))}
                     </Pie>
                     <Tooltip
                         formatter={(value, name, props) => [`${value} users`, props.payload.role]}
+                        contentStyle={{
+                            background: darkMode ? '#1f2937' : '#fffff',
+                            border: darkMode ? '1px solid #374151' : '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                            color: darkMode ? '#f3f4f6' : '#111827' 
+                        }}
                     />
-
-                    
+                    <Legend 
+                        wrapperStyle={{
+                            color: darkMode ? '#ffffff' : '#111827'
+                        }}
+                        formatter={(value) => (
+                          <span className={`${darkMode ? '#f3f4f6' : '#111827'}`}>
+                              {value}
+                          </span>
+                      )}
+                    />
                 </PieChart>
             </ResponsiveContainer>
         </div>

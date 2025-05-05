@@ -12,41 +12,42 @@ import {
 } from 'recharts';
 import { overviewData } from '../Samples/overview';
 
-const MyBarChart = () => {
+const MyBarChart = ({ darkMode }) => {
     return (
-        <div
-            style={{
-                width: '100%',
-                height: '100%',
-                padding: '1rem',
-                background: '#fffffff',
-                borderRadius: '1rem',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                marginBottom: '1.5rem'
-            }}
-        >
-            <h2 className="text-center text-xl font-semibold text-gray-800">
-                Login Activity by Hours
-            </h2>
-            <ResponsiveContainer width="100%" height="90%">
-                <BarChart
-                    data={overviewData.loginActivity}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="hour" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar
-                        dataKey="logins"
-                        fill="#4F46E5" // blue color
-                        activeBar={<Rectangle fill="#6366F1" stroke="#1E3A8A" />} // hover effect with darker stroke
-                    />
-                </BarChart>
-            </ResponsiveContainer>
-        </div>
+      <div className={`w-full h-full p-4 rounded-xl shadow-sm ${
+        darkMode 
+          ? 'bg-gray-800 border border-gray-700' 
+          : 'bg-white border border-gray-200'
+      } transition-colors duration-300`}>
+        <h2 className={`text-center text-xl font-semibold ${
+          darkMode ? 'text-gray-200' : 'text-gray-800'
+        }`}>
+          Login Activity by Hours
+        </h2>
+        <ResponsiveContainer width="100%" height="90%">
+          <BarChart data={overviewData.loginActivity}>
+            <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#374151' : '#e5e7eb'} />
+            <XAxis 
+              dataKey="hour" 
+              stroke={darkMode ? '#9ca3af' : '#6b7280'} 
+            />
+            <YAxis stroke={darkMode ? '#9ca3af' : '#6b7280'} />
+            <Tooltip
+              contentStyle={{
+                background: darkMode ? '#1f2937' : '#ffffff',
+                border: darkMode ? '1px solid #374151' : '1px solid #e5e7eb',
+                borderRadius: '8px'
+              }}
+            />
+            <Bar
+              dataKey="logins"
+              fill={darkMode ? '#818cf8' : '#4f46e5'}
+              activeBar={{ fill: darkMode ? '#6366f1' : '#4338ca' }}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     );
-};
+  };
 
 export default MyBarChart;

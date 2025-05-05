@@ -4,12 +4,15 @@ import './index.css'
 import App from './App.jsx'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext.jsx'
+import { DarkModeProvider } from './context/DarkModeContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <Toaster position='bottom-right' />
-      <App />
-    </AuthProvider>
+    <DarkModeProvider>
+      <AuthProvider>
+        <Toaster position='bottom-right' />
+        <App />
+      </AuthProvider>
+    </DarkModeProvider>
   </StrictMode>,
 )
