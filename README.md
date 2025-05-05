@@ -1,5 +1,15 @@
 # React + Vite
 MVP Dashboard for Admin Use.
+
+```
+Check it On :- https://mvp-dashboard-j4l9.onrender.com
+
+For Login to Dashboard
+
+Email = admin@example.com
+Password = password123
+
+```
 ## File Structure
 
 The project follows a modular structure to ensure scalability and maintainability. Below is the file structure:
