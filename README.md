@@ -1,8 +1,9 @@
-# React + Vite
+# DASHBOARD
 MVP Dashboard for Admin Use.
 
 ```
-Check it On :- https://mvp-dashboard-j4l9.onrender.com
+Check it On :- 
+https://mvp-dashboard-j4l9.onrender.com
 
 For Login to Dashboard
 
@@ -39,6 +40,9 @@ The project follows a modular structure to ensure scalability and maintainabilit
 ```
 ## Dark Mode Feature
 Dark mode was added to the dashboard to reduce eye strain during prolonged periods of analysis, as it is frequently used by administrators.
+
+## Pagination and Sortable Table Feature
+This feature adds pagination and sortable table headers to the users table. Clicking on a column header will sort the table data based on that column, either in ascending or descending order.
 
 ## Modular Functions
 
