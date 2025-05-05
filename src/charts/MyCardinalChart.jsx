@@ -9,7 +9,7 @@ const MyCardinalChart = ({ darkMode }) => {
     return (
       <div className={`w-full h-full p-4 rounded-xl shadow-sm ${
         darkMode 
-          ? 'bg-gray-800 border border-gray-700' 
+          ? 'bg-slate-900 border border-gray-700' 
           : 'bg-white border border-gray-200'
       } transition-colors duration-300`}>
         <h2 className={`text-center text-xl font-semibold ${

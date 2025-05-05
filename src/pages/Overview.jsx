@@ -122,14 +122,14 @@ const Overview = () => {
         {/* Charts Section */}
         <section className={`mt-10 rounded-xl border ${
           darkMode 
-            ? 'bg-gray-800 border-gray-700' 
+            ? 'bg-slate-900 border-slate-900' 
             : 'bg-white border-gray-200'
-        } transition-colors duration-300`}>
+        } transition-colors duration-300 `}>
           
           {/* Section header for user activity overview */}
           <h2 className={`text-lg sm:text-xl font-semibold ${
             darkMode ? 'text-gray-200' : 'text-gray-800'
-          } mb-4 p-3`}>
+          } mb-4 p-6`}>
             User Activity Overview
           </h2>
 
