@@ -7,7 +7,7 @@ const StatsCard = ({ title, value, icon }) => {
     <div className={`hover:shadow-md 
       transition-all duration-300 rounded-2xl px-5 py-6 
       w-full max-w-xs h-44 sm:h-48 flex flex-col items-center justify-center 
-      text-center font-poppins ${darkMode ? 'bg-slate-900 text-white shadow-lg': 'bg-white text-black'}  `}>
+      text-center font-poppins ${darkMode ? 'bg-slate-900 text-white shadow-lg': 'bg-white text-black shadow:md'}  `}>
       
       {/* Icon Container */}
       <div className="mb-3">
