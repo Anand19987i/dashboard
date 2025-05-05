@@ -37,6 +37,8 @@ The project follows a modular structure to ensure scalability and maintainabilit
 └── main.jsx          # Entry point
 
 ```
+## Dark Mode Feature
+Dark mode was added to the dashboard to reduce eye strain during prolonged periods of analysis, as it is frequently used by administrators.
 
 ## Modular Functions
 
