@@ -14,7 +14,7 @@ const Navbar = ({ toggleSidebar }) => {
   const { darkMode } = useDarkMode();
 
   return (
-    <header className={`w-full shadow-sm sticky top-0 z-30 ${darkMode ? 'bg-slate-800 text-white' : 'bg-white text-black'}`}>
+    <header className={`w-full shadow-sm sticky top-0 z-30 ${darkMode ? 'bg-slate-900 text-white shadow-lg' : 'bg-white text-black'}`}>
       <div className="flex items-center justify-between px-4 sm:px-6 md:px-8 py-4 max-w-screen-2xl mx-auto">
         
         {/* Left: Menu + Logo */}
