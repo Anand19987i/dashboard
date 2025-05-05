@@ -137,26 +137,26 @@ const Overview = () => {
           <div className="space-y-8 p-3">
             {/* Row of two charts (AreaChart and PieChart) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="h-72 sm:h-80 md:h-96">
+              <div className="h-80 sm:h-80 md:h-96">
                 <AreaChart darkMode={darkMode} />
               </div>
-              <div className="h-72 sm:h-80 md:h-96">
+              <div className="h-80 sm:h-80 md:h-96">
                 <MyPieChart darkMode={darkMode} />
               </div>
             </div>
 
             {/* Row of two charts (LineChart and BarChart) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="h-72 sm:h-80 md:h-96">
+              <div className="h-80 sm:h-80 md:h-96">
                 <MyLineChart darkMode={darkMode} />
               </div>
-              <div className="h-72 sm:h-80 md:h-96">
+              <div className="h-80 sm:h-80 md:h-96">
                 <MyBarChart darkMode={darkMode} />
               </div>
             </div>
 
             {/* A single large chart (CardinalChart) */}
-            <div className="h-72 sm:h-80 md:h-96">
+            <div className="h-80 sm:h-80 md:h-96">
               <MyCardinalChart darkMode={darkMode} />
             </div>
           </div>

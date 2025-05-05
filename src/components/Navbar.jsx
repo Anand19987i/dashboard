@@ -22,7 +22,7 @@ const Navbar = ({ toggleSidebar }) => {
           {/* Sidebar toggle (visible only on small screens) */}
           <button
             onClick={toggleSidebar}
-            className={`p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden ${darkMode ? 'text-white': 'text-gray-800'}`}
+            className={`p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden md:hidden ${darkMode ? 'text-white': 'text-gray-800'}`}
             aria-label="Toggle Sidebar"
           >
             <Menu size={22} />
